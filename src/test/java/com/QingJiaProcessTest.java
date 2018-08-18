@@ -33,7 +33,7 @@ public class QingJiaProcessTest {
 	@Autowired
 	private HistoryService historyService;
 
-	// 发送流程
+	// 发布流程
 	// @Test
 	public void deploy() {
 		Deployment deploy = repositoryService.createDeployment().addClasspathResource("com/diagrams/process-qingjia.bpmn").deploy();
@@ -73,16 +73,18 @@ public class QingJiaProcessTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void completTask() {
 		// 任务ID
-		String taskId = "87502";
-		taskService.complete(taskId);
+		String taskId = "20005";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("zhuguan", "xushaomin");
+		taskService.complete(taskId, params);
 		System.out.println("完成任务：任务ID：" + taskId);
 	}
 
 	// 查看实例 状态
-	//@Test
+	// @Test
 	public void viewInstance() {
 	}
 }
