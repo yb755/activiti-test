@@ -7,7 +7,7 @@
 
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
         <property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://192.168.1.235:3306/activiti?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false" />
+        <property name="url" value="jdbc:mysql://localhost:3306/activiti?createDatabaseIfNotExist=true&amp;serverTimezone=GMT%2b8&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false" />
         <property name="username" value="root" />
         <property name="password" value="123456" />
     </bean>

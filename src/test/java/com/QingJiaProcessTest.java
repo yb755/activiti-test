@@ -34,7 +34,7 @@ public class QingJiaProcessTest {
 	private HistoryService historyService;
 
 	// 发布流程
-	// @Test
+	//@Test
 	public void deploy() {
 		Deployment deploy = repositoryService.createDeployment().addClasspathResource("com/diagrams/process-qingjia.bpmn").deploy();
 		System.out.println("deploy.getId()=" + deploy.getId() + ",name=" + deploy.getName());
@@ -73,7 +73,7 @@ public class QingJiaProcessTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void completTask() {
 		// 任务ID
 		String taskId = "20005";
