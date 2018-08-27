@@ -68,7 +68,7 @@ public class OwnUserManager extends UserEntityManager {
 
 	@Override
 	public Boolean checkPassword(String userId, String password) {
-
+		
 		// now return true, means that ignoring the password verification
 		return true;
 	}
