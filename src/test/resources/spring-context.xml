@@ -1,39 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-        <property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/activiti?createDatabaseIfNotExist=true&amp;serverTimezone=GMT%2b8&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false" />
-        <property name="username" value="root" />
-        <property name="password" value="123456" />
-    </bean>
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/activiti?createDatabaseIfNotExist=true&amp;serverTimezone=GMT%2b8&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</bean>
 
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-    
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
-    <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
-        <property name="dataSource" ref="dataSource" />
-        <property name="transactionManager" ref="transactionManager" />
-        <property name="databaseSchemaUpdate" value="true" />
-        <property name="jobExecutorActivate" value="false" />
-    </bean>
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
 
-    <bean id="processEngineFactory" class="org.activiti.spring.ProcessEngineFactoryBean">
-        <property name="processEngineConfiguration" ref="processEngineConfiguration" />
-    </bean>
+	<bean id="keystoneConnection" class="com.user.KeystoneConnection">
+		<property name="protocal" value="http"></property>
+		<property name="address" value="192.168.1.235"></property>
+		<property name="port" value="8002"></property>
+	</bean>
 
-    <bean id="repositoryService" factory-bean="processEngineFactory" factory-method="getRepositoryService" />
-    <bean id="runtimeService" factory-bean="processEngineFactory" factory-method="getRuntimeService" />
-    <bean id="formService" factory-bean="processEngineFactory" factory-method="getFormService" />
-    <bean id="identityService" factory-bean="processEngineFactory" factory-method="getIdentityService" />
-    <bean id="taskService" factory-bean="processEngineFactory" factory-method="getTaskService" />
-    <bean id="historyService" factory-bean="processEngineFactory" factory-method="getHistoryService" />
-    <bean id="managementService" factory-bean="processEngineFactory" factory-method="getManagementService" />
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<property name="dataSource" ref="dataSource" />
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="databaseSchemaUpdate" value="true" />
+		<property name="jobExecutorActivate" value="false" />
+		<property name="customSessionFactories">
+			<list>
+				<bean class="com.user.OwnUserManagerFactory">
+					<constructor-arg ref="keystoneConnection"></constructor-arg>
+				</bean>
+				<bean class="com.user.OwnGroupMagagerFactory">
+					<constructor-arg ref="keystoneConnection"></constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="processEngineFactory" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+	</bean>
+
+	<bean id="repositoryService" factory-bean="processEngineFactory"
+		factory-method="getRepositoryService" />
+	<bean id="runtimeService" factory-bean="processEngineFactory"
+		factory-method="getRuntimeService" />
+	<bean id="formService" factory-bean="processEngineFactory"
+		factory-method="getFormService" />
+	<bean id="identityService" factory-bean="processEngineFactory"
+		factory-method="getIdentityService" />
+	<bean id="taskService" factory-bean="processEngineFactory"
+		factory-method="getTaskService" />
+	<bean id="historyService" factory-bean="processEngineFactory"
+		factory-method="getHistoryService" />
+	<bean id="managementService" factory-bean="processEngineFactory"
+		factory-method="getManagementService" />
 </beans>
