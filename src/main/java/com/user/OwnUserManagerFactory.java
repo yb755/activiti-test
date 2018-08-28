@@ -4,28 +4,30 @@ import org.activiti.engine.impl.interceptor.Session;
 import org.activiti.engine.impl.interceptor.SessionFactory;
 import org.activiti.engine.impl.persistence.entity.UserIdentityManager;
 
+import com.user.service.UserService;
+
 public class OwnUserManagerFactory implements SessionFactory {
-	
-	private KeystoneConnection keystoneConnection;
 
-    public OwnUserManagerFactory (KeystoneConnection keystoneConnection) {
-        this.keystoneConnection = keystoneConnection;
-    }
+	private UserService userService;
 
-    public Class<?> getSessionType() {
-        return UserIdentityManager.class;
-    }
+	public OwnUserManagerFactory(UserService userService) {
+		this.userService = userService;
+	}
 
-    public Session openSession() {
-        return new OwnUserManager(this.getKeystoneConnection());
-    }
+	public Class<?> getSessionType() {
+		return UserIdentityManager.class;
+	}
 
-    public KeystoneConnection getKeystoneConnection() {
-        return keystoneConnection;
-    }
+	public Session openSession() {
+		return new OwnUserManager(userService);
+	}
 
-    public void setKeystoneConnection(KeystoneConnection keystoneConnection) {
-        this.keystoneConnection = keystoneConnection;
-    }
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 
 }

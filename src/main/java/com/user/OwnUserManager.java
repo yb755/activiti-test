@@ -12,7 +12,6 @@ import org.activiti.engine.impl.persistence.entity.UserEntity;
 import org.activiti.engine.impl.persistence.entity.UserEntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.user.service.UserService;
 
@@ -20,13 +19,10 @@ public class OwnUserManager extends UserEntityManager {
 
 	private final Logger logger = LoggerFactory.getLogger(OwnUserManager.class);
 
-	private KeystoneConnection keystoneConnection;
-
-	@Autowired
 	private UserService userService;
 
-	public OwnUserManager(KeystoneConnection keystoneConnection) {
-		this.keystoneConnection = keystoneConnection;
+	public OwnUserManager(UserService userService) {
+		this.userService = userService;
 	}
 
 	@Override
@@ -57,19 +53,25 @@ public class OwnUserManager extends UserEntityManager {
 			return entity;
 		}
 		return null;
-		// throw new ActivitiException("User manager doesn't support finding an user by id");
 	}
 
 	@Override
 	public void deleteUser(String userId) {
-		throw new ActivitiException("User manager doesn't support deleting a newe user");
+		userService.delete(userId);
 	}
 
 	@Override
 	public List<User> findUserByQueryCriteria(UserQueryImpl query, Page page) {
-		System.out.println("start to findUserByQueryCriteria.....................!!!!!!_----------------------------------------------------");
-		// use your own method or third party method...
-		return super.findUserByQueryCriteria(query, page);
+		List<com.user.entity.User> userList = userService.findList();
+		List<User> list = new ArrayList<User>();
+		for (com.user.entity.User user : userList) {
+			UserEntity entity = new UserEntity();
+			entity.setId(user.getLoginName());
+			entity.setFirstName(user.getNickName());
+			entity.setLastName("");
+			list.add(entity);
+		}
+		return list;
 	}
 
 	@Override

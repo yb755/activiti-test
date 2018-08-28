@@ -10,12 +10,22 @@ import org.activiti.engine.impl.Page;
 import org.activiti.engine.impl.persistence.entity.GroupEntity;
 import org.activiti.engine.impl.persistence.entity.GroupEntityManager;
 
+import com.user.service.GroupService;
+
 public class OwnGroupManager extends GroupEntityManager {
 
-	private KeystoneConnection keystoneConnection;
+	private GroupService groupService;
 
-	public OwnGroupManager(KeystoneConnection keystoneConnection) {
-		this.keystoneConnection = keystoneConnection;
+	public OwnGroupManager(GroupService groupService) {
+		this.groupService = groupService;
+	}
+
+	public GroupService getGroupService() {
+		return groupService;
+	}
+
+	public void setGroupService(GroupService groupService) {
+		this.groupService = groupService;
 	}
 
 	@Override
@@ -35,27 +45,27 @@ public class OwnGroupManager extends GroupEntityManager {
 
 	@Override
 	public List<Group> findGroupByQueryCriteria(GroupQueryImpl query, Page page) {
-		// sometimes to implement how to query the Group
-		// return super.findGroupByQueryCriteria(query, page);
+		List<com.user.entity.Group> entityList = groupService.findList();
 
 		List<Group> groups = new ArrayList<Group>();
-		GroupEntity ge = new GroupEntity();
-		ge.setId("admin");
-		ge.setRevision(1);
-		ge.setName("Administrators");
-		ge.setType("security-role");
-		groups.add(ge);
+		for (com.user.entity.Group entity : entityList) {
+			GroupEntity ge = new GroupEntity();
+			ge.setId(String.valueOf(entity.getGroupId()));
+			ge.setRevision(1);
+			ge.setName(entity.getGroupName());
+			ge.setType("security-role");
+			groups.add(ge);
+		}
 		return groups;
 	}
 
 	@Override
 	public long findGroupCountByQueryCriteria(GroupQueryImpl query) {
-		// TODO Auto-generated method stub
 		return super.findGroupCountByQueryCriteria(query);
 	}
 
 	@Override
 	public List<Group> findGroupsByUser(String userId) {
-		throw new ActivitiException("My group manager doesn't support finding a group");
+		throw new ActivitiException("我的群组管理不支持查询群组");
 	}
 }

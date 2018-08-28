@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.user.MD5;
 import com.user.dao.UserDAO;
 import com.user.entity.User;
 import com.user.service.UserService;
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
 	public boolean checkUserPassword(String loginName, String password) {
 		User user = userDao.findByLoginName(loginName);
-		if (user != null && user.getPassword().equals(password)) {
+		if (user != null && user.getPassword().equals(MD5.md5(password))) {
 			return true;
 		}
 		return false;

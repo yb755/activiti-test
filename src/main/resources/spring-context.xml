@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+		
+	<context:annotation-config/>	
+	<context:component-scan base-package="com.user"></context:component-scan>
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
@@ -21,25 +27,23 @@
 	<tx:annotation-driven transaction-manager="transactionManager"
 		proxy-target-class="true" />
 
-	<bean id="keystoneConnection" class="com.user.KeystoneConnection">
-		<property name="protocal" value="http"></property>
-		<property name="address" value="192.168.1.235"></property>
-		<property name="port" value="8002"></property>
+	<bean id="ownUserManagerFactory" class="com.user.OwnUserManagerFactory">
+		<constructor-arg ref="userServiceImpl" index="0"></constructor-arg>
 	</bean>
-
+	
+	<bean id="ownGroupMagagerFactory" class="com.user.OwnGroupMagagerFactory">
+		<constructor-arg ref="groupServiceImpl"></constructor-arg>
+	</bean>
+	
 	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
 		<property name="dataSource" ref="dataSource" />
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="databaseSchemaUpdate" value="true" />
 		<property name="jobExecutorActivate" value="false" />
-		<property name="customSessionFactories">
+		<property name="customSessionFactories">			
 			<list>
-				<bean class="com.user.OwnUserManagerFactory">
-					<constructor-arg ref="keystoneConnection"></constructor-arg>
-				</bean>
-				<bean class="com.user.OwnGroupMagagerFactory">
-					<constructor-arg ref="keystoneConnection"></constructor-arg>
-				</bean>
+				<ref bean="ownUserManagerFactory"/>
+				<ref bean="ownGroupMagagerFactory"/>
 			</list>
 		</property>
 	</bean>
@@ -62,4 +66,6 @@
 		factory-method="getHistoryService" />
 	<bean id="managementService" factory-bean="processEngineFactory"
 		factory-method="getManagementService" />
+
+	<import resource="classpath:spring-mybatis.xml" />
 </beans>
