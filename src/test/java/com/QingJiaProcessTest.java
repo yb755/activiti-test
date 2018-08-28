@@ -73,12 +73,12 @@ public class QingJiaProcessTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void completTask() {
 		// 任务ID
-		String taskId = "20005";
+		String taskId = "5005";
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("zhuguan", "xushaomin");
+		params.put("zhuguan", "wangb");
 		taskService.complete(taskId, params);
 		System.out.println("完成任务：任务ID：" + taskId);
 	}
