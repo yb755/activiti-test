@@ -2,7 +2,7 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
   <process id="process-qingjia" name="请假流程" isExecutable="true">
     <documentation>请假流程</documentation>
-    <userTask id="usertask1" name="提出审请" activiti:assignee="${inputUserName}"></userTask>
+    <userTask id="usertask1" name="提出审请" activiti:candidateUsers="${userName}" activiti:candidateGroups="${groupName}"></userTask>
     <userTask id="usertask2" name="主管审批" activiti:assignee="${zhuguan}"></userTask>
     <userTask id="usertask3" name="经理审批" activiti:assignee="${manager}"></userTask>
     <endEvent id="endevent1" name="End"></endEvent>
@@ -58,7 +58,7 @@
         <omgdi:waypoint x="432.0" y="339.0"></omgdi:waypoint>
         <omgdi:waypoint x="432.0" y="295.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="521.0" y="341.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="30.0" x="521.0" y="341.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
