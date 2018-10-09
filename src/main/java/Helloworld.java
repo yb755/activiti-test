@@ -52,9 +52,9 @@ public class Helloworld extends ClassLoader implements Opcodes {
 		// 获得Example类的字节码，并且动态加载它
 		byte[] code = cw.toByteArray();
 
-		FileOutputStream fos = new FileOutputStream("Example.class");
-		fos.write(code);
-		fos.close();
+		//FileOutputStream fos = new FileOutputStream("Example.class");
+		//fos.write(code);
+		//fos.close();
 
 		Helloworld loader = new Helloworld();
 		Class<?> exampleClass = loader.defineClass("Example", code, 0, code.length);
@@ -81,7 +81,7 @@ public class Helloworld extends ClassLoader implements Opcodes {
 		m = Method.getMethod("void main (String[])");
 		mg = new GeneratorAdapter(ACC_PUBLIC + ACC_STATIC, m, null, null, cw);
 		mg.getStatic(Type.getType(System.class), "out", Type.getType(PrintStream.class));
-		mg.push("Hello world!");
+		mg.push("Hello world! by adapter");
 		mg.invokeVirtual(Type.getType(PrintStream.class), Method.getMethod("void println (String)"));
 		mg.returnValue();
 		mg.endMethod();
