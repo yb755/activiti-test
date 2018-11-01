@@ -20,7 +20,7 @@ public class Helloworld extends ClassLoader implements Opcodes {
 		// System.out.println("Hello world!");
 		// }
 		// }
-
+		long t1=System.nanoTime();
 		// 为Example提供ClassWriter，要求Example继承自Object
 		ClassWriter cw = new ClassWriter(0);
 		cw.visit(V1_1, ACC_PUBLIC, "Example", null, "java/lang/Object", null);
@@ -61,11 +61,13 @@ public class Helloworld extends ClassLoader implements Opcodes {
 
 		// 使用动态生成的类打印'Helloworld'
 		exampleClass.getMethods()[0].invoke(null, new Object[] { null });
-
+		long t2=System.nanoTime();
+		System.out.println(t2-t1);
 		// ------------------------------------------------------------------------
 		// 使用GeneratorAdapter的示例(很方便但是更慢)
 		// ------------------------------------------------------------------------
 
+		long t3=System.nanoTime();
 		cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		cw.visit(V1_1, ACC_PUBLIC, "Example", null, "java/lang/Object", null);
 
@@ -85,7 +87,7 @@ public class Helloworld extends ClassLoader implements Opcodes {
 		mg.invokeVirtual(Type.getType(PrintStream.class), Method.getMethod("void println (String)"));
 		mg.returnValue();
 		mg.endMethod();
-
+		
 		cw.visitEnd();
 
 		code = cw.toByteArray();
@@ -94,5 +96,7 @@ public class Helloworld extends ClassLoader implements Opcodes {
 
 		// 使用动态生成的类打印'Helloworld'
 		exampleClass.getMethods()[0].invoke(null, new Object[] { null });
+		long t4=System.nanoTime();
+		System.out.println(t4-t3);
 	}
 }
